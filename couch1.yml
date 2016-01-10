@@ -1,0 +1,65 @@
+---
+- name: Set up Couchbase
+  hosts: all
+  roles:
+     - nodesource.node
+  sudo: yes
+  tasks:
+
+  - name: Check if deps exists
+    stat: path=/vagrant/deps
+    register: deps_exists
+
+  - name: Create deps Directory
+    file: path=/vagrant/deps state=directory
+    when: deps_exists.stat.exists == False
+
+  - name: Check if Couchbase Package exists
+    stat: path=/vagrant/deps/couchbase-server-enterprise_4.0.0-ubuntu14.04_amd64.deb
+    register: couchbase_rpm
+
+  - name: Download Couchbase Package
+    get_url: url=http://packages.couchbase.com/releases/4.0.0/couchbase-server-enterprise_4.0.0-ubuntu14.04_amd64.deb dest=/vagrant/deps/
+    when: couchbase_rpm.stat.exists == False
+
+  - name: Install Couchbase Package
+    apt: deb=/vagrant/deps/couchbase-server-enterprise_4.0.0-ubuntu14.04_amd64.deb state=present
+
+  - name: Wait for Couchbase initilization
+    wait_for: port=8091 delay=2
+
+  - name: Configure Base Couchbase Server
+    shell: /opt/couchbase/bin/couchbase-cli cluster-init -c couch1.vagrant:8091 --cluster-init-username=couchbase --cluster-init-password=couchbase --cluster-init-port=8091 --cluster-init-ramsize=1781 --cluster-index-ramsize=1024 --services=data,index,query
+    register: couchbase_config
+    ignore_errors: True
+
+  - name: Configure assets Bucket
+    shell: /opt/couchbase/bin/couchbase-cli bucket-create -c couch1.vagrant:8091 -u couchbase -p couchbase --bucket=assets --bucket-ramsize=1781 --bucket-type=couchbase
+    when: couchbase_config is defined
+    ignore_errors: True
+
+  - name: Wait for query service port
+    wait_for: port=8093 delay=3
+
+  - name: Create Primary Index on assets bucket
+    uri: url=http://couch1.vagrant:8093/query/service
+         method=POST
+         body='statement=CREATE%20PRIMARY%20INDEX%20on%20assets%20USING%20GSI'
+         HEADER_Content-Type="application/x-www-form-urlencoded"
+         status_code=200
+
+  - name: Install forever
+    npm: name=forever global=yes state=latest
+
+  - name: Install npm packages
+    npm: path=/vagrant/api
+
+  - name: Check list of Node.js apps running.
+    command: forever list
+    register: forever_list
+    changed_when: false
+
+  - name: Start app
+    command: forever start /vagrant/api/bin/www
+    when: forever_list.stdout.find('/vagrant/api/bin/www') == -1
+
