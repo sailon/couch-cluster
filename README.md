@@ -29,7 +29,8 @@ Run ```vagrant up``` from the root directory
 
 
 ## View the API
-Navigate to couch1.vagrant:3000 to view the first datacenter cluster
+Navigate to couch1.vagrant:3000 to view the first datacenter cluster.
+
 Navigate to couch2.vagrant:3000 to view the second datacenter cluster
 
 ## Postman API Collection
