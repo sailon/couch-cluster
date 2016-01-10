@@ -13,8 +13,6 @@ $ vagrant plugin install vagrant-hostmanager
 $ vagrant plugin install vagrant-cachier
 ```
 
-4. Install ChefDK https://downloads.chef.io/chef-dk/
-
 5. Install Ansible
 
 ```sh
