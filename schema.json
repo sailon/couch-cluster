@@ -1,0 +1,15 @@
+{
+	"uri": {
+		"type": "string",
+		"required": true,
+		"validation": "/\w{3,}\:\/\/\w{2,}\/\w*/g"
+	},
+	"name": {
+		"type": "string",
+		"required": false
+	},
+	"note": {
+		"type": "string",
+		"required": false
+	}
+}
