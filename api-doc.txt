@@ -1,0 +1,34 @@
+- Add a new asset
+
+	URL: http://{host}:3000/api/assets
+	Method: POST
+	Content-type: application/json
+	Response Code: 201
+	Example Body:
+		{
+			"uri": "myorg://users/user1",
+			"name": "User 1"
+		}
+
+- Add a note to an existing asset
+
+	URL: http://{host}:3000/api/assets
+	Method: PUT
+	Content-type: application/json
+	Response Code: 200
+	Example Body:
+		{
+			"uri": "myorg://users/user1",
+			"note": "This note will be added to the asset with the given URI, provided that the asset is not deleted."
+		}
+
+- Delete an asset
+
+	URL: http://{host}:3000/api/assets
+	Method: DELETE
+	Content-type: application/json
+	Response Code: 204
+	Example Body:
+		{
+			"uri": "myorg://users/user1"
+		}
