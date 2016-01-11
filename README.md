@@ -35,6 +35,7 @@ Navigate to couch2.vagrant:3000 to view the second datacenter cluster
 
 ## Postman API Collection
 Import the ```couchbase-xdcr.json.postman_collection``` into Postman for a few example requests
+https://www.getpostman.com/
 
 ## Run Load Test
 
