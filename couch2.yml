@@ -19,7 +19,7 @@
     register: couchbase_rpm
 
   - name: Download Couchbase Package
-    get_url: url=http://packages.couchbase.com/releases/4.1.0/couchbase-server-enterprise_4.1.0-ubuntu14.04_amd64.deb
+    get_url: url=http://packages.couchbase.com/releases/4.1.0/couchbase-server-enterprise_4.1.0-ubuntu14.04_amd64.deb dest=/vagrant/deps/
     when: couchbase_rpm.stat.exists == False
 
   - name: Install Couchbase Package
