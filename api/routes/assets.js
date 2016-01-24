@@ -77,7 +77,7 @@ router.post('/', function (req, res) {
 
   var uri = req.body.uri;
 
-  if (!isValidUri(uri)) return res.send('400, "uri" is a required field and must be well formed.');
+  if (!isValidUri(uri)) return res.status(400).send('"uri" is a required field and must be well formed.');
 
   // Create or update an asset document
   bucket.upsert(req.body.uri,req.body,function(err,assets){
@@ -97,7 +97,7 @@ router.delete('/', function (req, res) {
 
   var uri = req.body.uri;
 
-  if (!isValidUri(uri)) return res.send('400, "uri" is a required field and must be well formed.');
+  if (!isValidUri(uri)) return res.status(400).send('"uri" is a required field and must be well formed.');
 
   // Build the query to find the document
   var query = docQuery(uri);
@@ -133,8 +133,8 @@ router.put('/', function (req, res) {
   var uri = sanitize(req.body.uri);
   var note = req.body.note;
 
-  if (!isValidUri(uri)) return res.send('400, "uri" is a required field and must be well-formed.');
-  if (!note) return res.send('400, "note" is a required field.');
+  if (!isValidUri(uri)) return res.status(400).send('"uri" is a required field and must be well-formed.');
+  if (!note) return res.status(400).send('"note" is a required field.');
 
   // Build the query to find the document
   var query = docQuery(uri);
